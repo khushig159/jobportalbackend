@@ -95,14 +95,14 @@ exports.verifyEmailSeeker = async (req, res, next) => {
 exports.loginSeeker = async (req, res, next) => {
     const options = {
         httpOnly: false,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000 // 1 day
     };
 
     const refreshOptions = {
         httpOnly: false,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     };
