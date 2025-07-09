@@ -121,13 +121,13 @@ exports.verifyEmailRecruiter = async (req, res, next) => {
 
 exports.loginRecruiter = async (req, res, next) => {
     const options = {
-        httpOnly: false,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000
     };
     const refreshoptions = {
-        httpOnly: false,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -192,8 +192,8 @@ exports.logoutRecruiter = async (req, res, next) => {
         user.refreshTokenrecruiter = null;
         await user.save();
         const options = {
-            httpOnly: false,
-            secure: true,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
             sameSite: "None",
             maxAge: 24 * 60 * 60 * 1000
         }

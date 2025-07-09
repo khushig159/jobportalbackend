@@ -94,14 +94,14 @@ exports.verifyEmailSeeker = async (req, res, next) => {
 
 exports.loginSeeker = async (req, res, next) => {
     const options = {
-        httpOnly: false,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000 // 1 day
     };
 
     const refreshOptions = {
-        httpOnly: false,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -183,8 +183,8 @@ exports.logoutSeeker = async (req, res, next) => {
         user.refreshToken = null;
         await user.save();
         const options = {
-            httpOnly: false,
-            secure: true,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
             sameSite: "None",
             maxAge: 24 * 60 * 60 * 1000
         }
