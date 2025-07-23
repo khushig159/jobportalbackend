@@ -22,17 +22,17 @@ const imageStorage = new CloudinaryStorage({
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
+    resource_type : 'auto',
     params: async (req, file) => {
       let folder = '';
-      let resource_type = 'auto';
       let type='upload'
       if (file.fieldname === 'resume') {
         folder = 'jobportal/user-resumes';
-        resource_type=resource_type
+        // resource_type=resource_type
       }
        else if (file.fieldname === 'profilePhoto') {
         folder = 'jobportal/profilePhotos';
-        resource_type = 'image';
+        // resource_type = 'image';
       } else {
         throw new Error('Unexpected fieldname');
       }
@@ -41,8 +41,8 @@ const storage = new CloudinaryStorage({
       return {
         folder: folder,
         allowed_formats: file.fieldname === 'profilePhoto' ? ['jpg', 'png', 'jpeg'] : ['pdf', 'docx', 'doc'],
-        public_id: `${name}-${Date.now()}${ext}`,
-        resource_type,
+        public_id: `${name}-${Date.now()}`,
+        // resource_type,
         type
       };
     }
@@ -79,7 +79,7 @@ const chatbotResumeStorage = new CloudinaryStorage({
         allowed_formats: ['pdf', 'docx', 'doc'],
         resource_type: 'auto', // Required for non-image files
         type:'upload',
-        public_id: `${name}-${Date.now()}${ext}`,
+        public_id: `${name}-${Date.now()}`,
 
           
       };
