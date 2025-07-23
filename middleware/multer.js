@@ -19,16 +19,7 @@ const imageStorage = new CloudinaryStorage({
 });
 
 // Storage for user resume
-const resumeStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'jobportal/user-resumes',
-    allowed_formats: ['pdf', 'docx', 'doc'],
-    public_id: (req, file) => {
-        const { name } = path.parse(file.originalname);
-        return `${name}-${Date.now()}`;
-      }  }
-});
+
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
@@ -41,7 +32,7 @@ const storage = new CloudinaryStorage({
         resource_type = 'image';
       } else if (file.fieldname === 'resume') {
         folder = 'jobportal/user-resumes';
-        resource_type = 'auto';
+        resource_type = 'raw';
       } else {
         throw new Error('Unexpected fieldname');
       }
@@ -86,7 +77,7 @@ const chatbotResumeStorage = new CloudinaryStorage({
       return {
         folder: 'jobportal/chat-resumes',
         allowed_formats: ['pdf', 'docx', 'doc'],
-        resource_type: 'auto', // Required for non-image files
+        resource_type: 'raw', // Required for non-image files
         type:'upload',
         public_id: `${name}-${Date.now()}${ext}`,
 
@@ -116,7 +107,7 @@ const resumeFilter = (req, file, cb) => {
 
 const uploadProfile = multer({ storage, fileFilter });
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
-const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
+// const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
 const uploadChatbotResume = multer({ storage: chatbotResumeStorage, fileFilter: resumeFilter });
 
 
