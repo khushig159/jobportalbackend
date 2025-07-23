@@ -73,13 +73,18 @@ const storage = new CloudinaryStorage({
 
 // Storage for chatbot resume
 const chatbotResumeStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'jobportal/chat-resumes',
-    allowed_formats: ['pdf', 'docx'],
-    public_id: (req, file) => file.originalname.split('.')[0] + '-' + Date.now()
-  }
-});
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+      return {
+        folder: 'jobportal/chat-resumes',
+        allowed_formats: ['pdf', 'docx', 'doc'],
+        resource_type: 'raw', // Required for non-image files
+        public_id: file.originalname.split('.')[0] + '-' + Date.now()
+      };
+    }
+  });
+  
+  
 
 const imageFilter = (req, file, cb) => {
   if (allowedImageTypes.includes(file.mimetype)) {
