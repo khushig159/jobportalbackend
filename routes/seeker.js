@@ -5,6 +5,8 @@ const seekerController = require('../controller/seeker');
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const { uploadProfile, uploadCompanyLogo, uploadUserResume, uploadChatbotResume } = require('../middleware/multer');
+
 
 // Combined storage config
 const storage = multer.diskStorage({
@@ -65,23 +67,53 @@ router.delete('/unsavejob/:jobId',authSeeker,seekerController.unsavejobs)
 router.delete('/deleteApplication/:jobId',authSeeker,seekerController.deleteApplication)
 
 
+// router.post(
+//     '/create-profile',
+//     authSeeker,
+//     upload.fields([
+//         { name: 'resume', maxCount: 1 },
+//         { name: 'profilePhoto', maxCount: 1 }
+//     ]),
+//     seekerController.createProfile
+// );
 router.post(
-    '/create-profile',
-    authSeeker,
-    upload.fields([
-        { name: 'resume', maxCount: 1 },
-        { name: 'profilePhoto', maxCount: 1 }
-    ]),
-    seekerController.createProfile
+  '/create-profile',
+  authSeeker,
+  (req, res, next) => {
+    uploadProfile.single('profilePhoto')(req, res, function (err) {
+      if (err) return res.status(400).json({ error: err.message });
+      uploadUserResume.single('resume')(req, res, function (err2) {
+        if (err2) return res.status(400).json({ error: err2.message });
+        next();
+      });
+    });
+  },
+  seekerController.createProfile
 );
 
-router.put('/editProfile',authSeeker,
-  upload.fields([
-    { name: 'resume', maxCount: 1 },
-    { name: 'profilePhoto', maxCount: 1 }
-  ]),
+
+// router.put('/editProfile',authSeeker,
+//   upload.fields([
+//     { name: 'resume', maxCount: 1 },
+//     { name: 'profilePhoto', maxCount: 1 }
+//   ]),
+//   seekerController.editJobSeekerProfile
+// )
+router.put(
+  '/editProfile',
+  authSeeker,
+  (req, res, next) => {
+    uploadProfile.single('profilePhoto')(req, res, function (err) {
+      if (err) return res.status(400).json({ error: err.message });
+      uploadUserResume.single('resume')(req, res, function (err2) {
+        if (err2) return res.status(400).json({ error: err2.message });
+        next();
+      });
+    });
+  },
   seekerController.editJobSeekerProfile
-)
+);
+
 
 router.get('/getprofile',authSeeker,seekerController.getSeekerProfile )
 

@@ -6,6 +6,8 @@ const authRecruiter=require('../middleware/auth-recruiter');
 const recruiterController = require('../controller/recruiter')
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { uploadProfile, uploadCompanyLogo, uploadUserResume, uploadChatbotResume } = require('../middleware/multer');
+
 
 const companylogoStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -28,7 +30,7 @@ const CompanyLogoFilter = (req, file, cb) => {
     }
 };
 
-const uploadCompanyLogo = multer({ storage: companylogoStorage, fileFilter: CompanyLogoFilter });
+// const uploadCompanyLogo = multer({ storage: companylogoStorage, fileFilter: CompanyLogoFilter });
 
 router.post('/profile', authRecruiter, uploadCompanyLogo.single('companyLogo'), recruiterController.postrecruiterProfile);
 

@@ -4,6 +4,8 @@ const { validationResult } = require('express-validator');
 const Recruiter = require('../model/recruiter')
 const fs = require('fs')
 const path = require('path')
+const {clearImage}=require('../middleware/multer')
+
 
 exports.getJobs = async (req, res, next) => {
     try {
@@ -174,14 +176,14 @@ exports.deleteApplication = async (req, res, next) => {
     }
 }
 
-const clearImage = (filePath) => {
-    const fullPath = path.join(__dirname, '..', filePath);
-    fs.unlink(fullPath, (err) => {
-        if (err) {
-            console.log("Failed to delete file:", filePath, err);
-        }
-    });
-};
+// const clearImage = (filePath) => {
+//     const fullPath = path.join(__dirname, '..', filePath);
+//     fs.unlink(fullPath, (err) => {
+//         if (err) {
+//             console.log("Failed to delete file:", filePath, err);
+//         }
+//     });
+// };
 exports.createProfile = async (req, res, next) => {
     try {
         const userId = req.userId;
@@ -290,29 +292,50 @@ exports.editJobSeekerProfile = async (req, res, next) => {
         // console.log(jobSeeker.resumeUrl)
         // console.log(jobSeeker.profilephoto)
 
-        if (req.files?.resume?.[0]) {
-            const resumePath = req.files.resume[0].path.replace(/\\/g, "/").split("uploads/")[1];
-            const resumePath2=`uploads/${resumePath}`;
-            console.log(resumePath2)
-            if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== resumePath) {
-                clearImage(jobSeeker.resumeUrl)
-            }
-            jobSeeker.resumeUrl = resumePath2
+        // if (req.files?.resume?.[0]) {
+        //     const resumePath = req.files.resume[0].path.replace(/\\/g, "/").split("uploads/")[1];
+        //     const resumePath2=`uploads/${resumePath}`;
+        //     console.log(resumePath2)
+        //     if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== resumePath) {
+        //         clearImage(jobSeeker.resumeUrl)
+        //     }
+        //     jobSeeker.resumeUrl = resumePath2
 
-        }
+        // }
         // console.log("User ID:", req.userId);
         // console.log("User Document:", await JobSeeker.findById(req.userId));
         // console.log("FILES:", req.files);
 
-        if (req.files?.profilePhoto?.[0]) {
-            const photoPath = req.files.profilePhoto[0].path.replace(/\\/g, "/").split("uploads/")[1];;
-            const photoPath2=`uploads/${photoPath}`;
-            //console.log(photoPath2)           
-             if (jobSeeker.profilephoto && jobSeeker.profilephoto !== photoPath) {
-                clearImage(jobSeeker.profilephoto)
-                //console.log(photoPath)
+        // if (req.files?.profilePhoto?.[0]) {
+        //     const photoPath = req.files.profilePhoto[0].path.replace(/\\/g, "/").split("uploads/")[1];;
+        //     const photoPath2=`uploads/${photoPath}`;
+        //     //console.log(photoPath2)           
+        //      if (jobSeeker.profilephoto && jobSeeker.profilephoto !== photoPath) {
+        //         clearImage(jobSeeker.profilephoto)
+        //         //console.log(photoPath)
+        //     }
+        //     jobSeeker.profilephoto = photoPath2;
+        // }
+        if (req.files?.resume?.[0]) {
+            const newResumeUrl = req.files.resume[0].path;
+        
+            // If old resume exists and is different, delete from Cloudinary
+            if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== newResumeUrl) {
+                await clearImage(jobSeeker.resumeUrl);
             }
-            jobSeeker.profilephoto = photoPath2;
+        
+            jobSeeker.resumeUrl = newResumeUrl;
+        }
+        
+        if (req.files?.profilePhoto?.[0]) {
+            const newPhotoUrl = req.files.profilePhoto[0].path;
+        
+            // If old profile photo exists and is different, delete from Cloudinary
+            if (jobSeeker.profilephoto && jobSeeker.profilephoto !== newPhotoUrl) {
+                await clearImage(jobSeeker.profilephoto);
+            }
+        
+            jobSeeker.profilephoto = newPhotoUrl;
         }
 
         jobSeeker.phone=phone || jobSeeker.phone;

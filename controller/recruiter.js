@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator');
 const fs = require('fs')
 const path = require('path')
 const JobSeeker=require('../model/seeker')
+const {clearImage}=require('../middleware/multer')
 
 exports.postJobs = async (req, res, next) => {
     try {
@@ -209,12 +210,12 @@ exports.getRecruiterProfile = async (req, res, next) => {
     }
 }
 
-const clearImage = filePath => {
-    filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(filePath, err => {
-        console.log(err);
-    })
-}
+// const clearImage = filePath => {
+//     filePath = path.join(__dirname, '..', filePath);
+//     fs.unlink(filePath, err => {
+//         console.log(err);
+//     })
+// }
 
 exports.editRecruiterProfile = async (req, res, next) => {
     const recruiterId = req.recruiteruserId

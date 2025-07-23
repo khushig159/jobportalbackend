@@ -4,6 +4,7 @@ const generateGeminiResponse = require('../utils/gemini');
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const path = require("path");
+const { uploadProfile, uploadCompanyLogo, uploadUserResume, uploadChatbotResume } = require('../middleware/multer');
 const extractTextFromResume = require('../utils/resumeParser')
 
 const resumeStorage = multer.diskStorage({
@@ -32,8 +33,9 @@ const uploadResume = multer({
     limits: { fileSize: 2 * 1024 * 1024 }
 })
 
-router.post("/chat",uploadResume.single("resumechat"), async (req, res, next) => {
+router.post("/chat",uploadChatbotResume.single("resumechat"), async (req, res, next) => {
     const { prompt } = req.body;
+    const resumeUrl = req.file?.path.replace(/\\/g, "/");
 
     try {
         let finalPrompt = '';
@@ -76,6 +78,7 @@ router.post("/chat",uploadResume.single("resumechat"), async (req, res, next) =>
         }
       }
     });
+   
 
 
 module.exports = router;
