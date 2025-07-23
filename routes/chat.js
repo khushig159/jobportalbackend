@@ -35,7 +35,7 @@ const uploadResume = multer({
 
 router.post("/chat",uploadChatbotResume.single("resumechat"), async (req, res, next) => {
     const { prompt } = req.body;
-    const resumeUrl = req.file?.path.replace(/\\/g, "/");
+    const resumeUrl = req.file?.path || req.file?.secure_url || req.file?.url;
 
     try {
         let finalPrompt = '';
@@ -74,7 +74,8 @@ router.post("/chat",uploadChatbotResume.single("resumechat"), async (req, res, n
         res.status(500).json({ error: "Failed to handle chat request." });
       } finally {
         if (req.file) {
-          fs.unlink(req.file.path, () => {}); // optional cleanup
+          fs.unlink( req.file?.path || req.file?.secure_url || req.file?.url
+            , () => {}); // optional cleanup
         }
       }
     });

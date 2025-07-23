@@ -317,7 +317,7 @@ exports.editJobSeekerProfile = async (req, res, next) => {
         //     jobSeeker.profilephoto = photoPath2;
         // }
         if (req.files?.resume?.[0]) {
-            const newResumeUrl = req.files.resume[0].path;
+            const newResumeUrl = req.files.resume[0].secure_url;
         
             // If old resume exists and is different, delete from Cloudinary
             if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== newResumeUrl) {
@@ -328,7 +328,7 @@ exports.editJobSeekerProfile = async (req, res, next) => {
         }
         
         if (req.files?.profilePhoto?.[0]) {
-            const newPhotoUrl = req.files.profilePhoto[0].path;
+            const newPhotoUrl = req.files.profilePhoto[0].secure_url;
         
             // If old profile photo exists and is different, delete from Cloudinary
             if (jobSeeker.profilephoto && jobSeeker.profilephoto !== newPhotoUrl) {

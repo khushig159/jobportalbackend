@@ -233,7 +233,7 @@ exports.editRecruiterProfile = async (req, res, next) => {
             return res.status(404).json({ message: "Recruiter not found, Login to continue" });
         }
         if (req.file) {
-            const newLogoPath = req.file.path.replace("\\", "/");
+            const newLogoPath = req.file?.path || req.file?.secure_url || req.file?.url;;
 
             // Delete previous logo if different
             if (recruiter.companyLogo && recruiter.companyLogo !== newLogoPath) {
