@@ -22,17 +22,17 @@ const imageStorage = new CloudinaryStorage({
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    resource_type : 'auto',
     params: async (req, file) => {
       let folder = '';
+      let resource_type = '';
       let type='upload'
       if (file.fieldname === 'resume') {
         folder = 'jobportal/user-resumes';
-        // resource_type=resource_type
+        resource_type='auto'
       }
        else if (file.fieldname === 'profilePhoto') {
         folder = 'jobportal/profilePhotos';
-        // resource_type = 'image';
+        resource_type = 'image';
       } else {
         throw new Error('Unexpected fieldname');
       }
