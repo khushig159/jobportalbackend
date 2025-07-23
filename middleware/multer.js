@@ -12,8 +12,10 @@ const imageStorage = new CloudinaryStorage({
   params: {
     folder: 'jobportal/images',
     allowed_formats: ['jpg', 'png', 'jpeg'],
-    public_id: (req, file) => file.originalname.split('.')[0] + '-' + Date.now()
-  }
+    public_id: (req, file) => {
+        const { name } = path.parse(file.originalname);
+        return `${name}-${Date.now()}`;
+      }  }
 });
 
 // Storage for user resume
@@ -22,8 +24,10 @@ const resumeStorage = new CloudinaryStorage({
   params: {
     folder: 'jobportal/user-resumes',
     allowed_formats: ['pdf', 'docx', 'doc'],
-    public_id: (req, file) => file.originalname.split('.')[0] + '-' + Date.now()
-  }
+    public_id: (req, file) => {
+        const { name } = path.parse(file.originalname);
+        return `${name}-${Date.now()}`;
+      }  }
 });
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -40,11 +44,12 @@ const storage = new CloudinaryStorage({
       } else {
         throw new Error('Unexpected fieldname');
       }
-  
+      const { name, ext } = path.parse(file.originalname);
+
       return {
         folder: folder,
         allowed_formats: file.fieldname === 'profilePhoto' ? ['jpg', 'png', 'jpeg'] : ['pdf', 'docx', 'doc'],
-        public_id: file.originalname.split('.')[0] + '-' + Date.now(),
+        public_id: `${name}-${Date.now()}${ext}`,
         resource_type,
       };
     }
@@ -75,11 +80,15 @@ const storage = new CloudinaryStorage({
 const chatbotResumeStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
+        const { name, ext } = path.parse(file.originalname);
       return {
         folder: 'jobportal/chat-resumes',
         allowed_formats: ['pdf', 'docx', 'doc'],
         resource_type: 'raw', // Required for non-image files
-        public_id: file.originalname.split('.')[0] + '-' + Date.now()
+
+        public_id: `${name}-${Date.now()}${ext}`,
+
+          
       };
     }
   });
