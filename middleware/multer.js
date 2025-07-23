@@ -41,7 +41,7 @@ const storage = new CloudinaryStorage({
         resource_type = 'image';
       } else if (file.fieldname === 'resume') {
         folder = 'jobportal/user-resumes';
-        resource_type = 'raw';
+        resource_type = 'auto';
       } else {
         throw new Error('Unexpected fieldname');
       }
@@ -86,7 +86,7 @@ const chatbotResumeStorage = new CloudinaryStorage({
       return {
         folder: 'jobportal/chat-resumes',
         allowed_formats: ['pdf', 'docx', 'doc'],
-        resource_type: 'raw', // Required for non-image files
+        resource_type: 'auto', // Required for non-image files
         type:'upload',
         public_id: `${name}-${Date.now()}${ext}`,
 
