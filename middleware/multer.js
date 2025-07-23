@@ -51,6 +51,8 @@ const storage = new CloudinaryStorage({
   });
   
   const fileFilter = (req, file, cb) => {
+    console.log('📝 Received:', file.fieldname, file.originalname, file.mimetype);
+
     if (file.fieldname === 'profilePhoto') {
       if (allowedImageTypes.includes(file.mimetype)) {
         cb(null, true);
