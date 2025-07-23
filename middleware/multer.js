@@ -137,6 +137,5 @@ module.exports = {
   clearImage,
   uploadProfile,
   uploadCompanyLogo,
-  uploadUserResume,
   uploadChatbotResume
 };
