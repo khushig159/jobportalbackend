@@ -34,6 +34,7 @@ const storage = new CloudinaryStorage({
     params: async (req, file) => {
       let folder = '';
       let resource_type = 'auto';
+      let type='upload'
   
       if (file.fieldname === 'profilePhoto') {
         folder = 'jobportal/profilePhotos';
@@ -51,6 +52,7 @@ const storage = new CloudinaryStorage({
         allowed_formats: file.fieldname === 'profilePhoto' ? ['jpg', 'png', 'jpeg'] : ['pdf', 'docx', 'doc'],
         public_id: `${name}-${Date.now()}${ext}`,
         resource_type,
+        type
       };
     }
   });
@@ -85,7 +87,7 @@ const chatbotResumeStorage = new CloudinaryStorage({
         folder: 'jobportal/chat-resumes',
         allowed_formats: ['pdf', 'docx', 'doc'],
         resource_type: 'raw', // Required for non-image files
-
+        type:'upload',
         public_id: `${name}-${Date.now()}${ext}`,
 
           
