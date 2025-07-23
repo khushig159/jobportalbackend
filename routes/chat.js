@@ -41,7 +41,7 @@ router.post("/chat",uploadChatbotResume.single("resumechat"), async (req, res, n
         let finalPrompt = '';
 
         if (req.file) {
-            const resumeText = await extractTextFromResume(req.file.path);
+            const resumeText = await extractTextFromResume(req.file?.path || req.file?.secure_url || req.file?.url);
 
             finalPrompt = `User uploaded the following resume: ${resumeText}
 
