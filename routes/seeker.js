@@ -76,20 +76,21 @@ router.delete('/deleteApplication/:jobId',authSeeker,seekerController.deleteAppl
 //     ]),
 //     seekerController.createProfile
 // );
-router.post(
-  '/create-profile',
+router.put(
+  '/editProfile',
   authSeeker,
   (req, res, next) => {
-    uploadProfile.single('profilePhoto')(req, res, function (err) {
+    uploadProfile.fields([
+      { name: 'profilePhoto', maxCount: 1 },
+      { name: 'resume', maxCount: 1 }
+    ])(req, res, function (err) {
       if (err) return res.status(400).json({ error: err.message });
-      uploadUserResume.single('resume')(req, res, function (err2) {
-        if (err2) return res.status(400).json({ error: err2.message });
-        next();
-      });
+      next();
     });
   },
-  seekerController.createProfile
+  seekerController.editJobSeekerProfile
 );
+
 
 
 // router.put('/editProfile',authSeeker,
@@ -103,16 +104,17 @@ router.put(
   '/editProfile',
   authSeeker,
   (req, res, next) => {
-    uploadProfile.single('profilePhoto')(req, res, function (err) {
+    uploadProfile.fields([
+      { name: 'profilePhoto', maxCount: 1 },
+      { name: 'resume', maxCount: 1 }
+    ])(req, res, function (err) {
       if (err) return res.status(400).json({ error: err.message });
-      uploadUserResume.single('resume')(req, res, function (err2) {
-        if (err2) return res.status(400).json({ error: err2.message });
-        next();
-      });
+      next();
     });
   },
   seekerController.editJobSeekerProfile
 );
+
 
 
 router.get('/getprofile',authSeeker,seekerController.getSeekerProfile )

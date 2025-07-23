@@ -25,6 +25,49 @@ const resumeStorage = new CloudinaryStorage({
     public_id: (req, file) => file.originalname.split('.')[0] + '-' + Date.now()
   }
 });
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+      let folder = '';
+      let resource_type = 'auto';
+  
+      if (file.fieldname === 'profilePhoto') {
+        folder = 'jobportal/profilePhotos';
+        resource_type = 'image';
+      } else if (file.fieldname === 'resume') {
+        folder = 'jobportal/user-resumes';
+        resource_type = 'raw';
+      } else {
+        throw new Error('Unexpected fieldname');
+      }
+  
+      return {
+        folder: folder,
+        allowed_formats: file.fieldname === 'profilePhoto' ? ['jpg', 'png', 'jpeg'] : ['pdf', 'docx', 'doc'],
+        public_id: file.originalname.split('.')[0] + '-' + Date.now(),
+        resource_type,
+      };
+    }
+  });
+  
+  const fileFilter = (req, file, cb) => {
+    if (file.fieldname === 'profilePhoto') {
+      if (allowedImageTypes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only JPG, PNG, JPEG images are allowed'), false);
+      }
+    } else if (file.fieldname === 'resume') {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (allowedResumeTypes.includes(ext)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only PDF, DOCX, DOC files are allowed'), false);
+      }
+    } else {
+      cb(new Error('Unexpected fieldname'), false);
+    }
+  };
 
 // Storage for chatbot resume
 const chatbotResumeStorage = new CloudinaryStorage({
@@ -53,7 +96,7 @@ const resumeFilter = (req, file, cb) => {
   }
 };
 
-const uploadProfile = multer({ storage: imageStorage, fileFilter: imageFilter });
+const uploadProfile = multer({ storage, fileFilter });
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
 const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
 const uploadChatbotResume = multer({ storage: chatbotResumeStorage, fileFilter: resumeFilter });
