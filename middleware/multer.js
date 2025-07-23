@@ -26,13 +26,13 @@ const storage = new CloudinaryStorage({
       let folder = '';
       let resource_type = 'auto';
       let type='upload'
-  
-      if (file.fieldname === 'profilePhoto') {
+      if (file.fieldname === 'resume') {
+        folder = 'jobportal/user-resumes';
+        resource_type=resource_type
+      }
+       else if (file.fieldname === 'profilePhoto') {
         folder = 'jobportal/profilePhotos';
         resource_type = 'image';
-      } else if (file.fieldname === 'resume') {
-        folder = 'jobportal/user-resumes';
-        resource_type = 'auto';
       } else {
         throw new Error('Unexpected fieldname');
       }
