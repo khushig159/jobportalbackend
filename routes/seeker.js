@@ -9,47 +9,47 @@ const { uploadProfile, combinedCloudinaryUpload,profilePhotoUpload, resumeUpload
 
 
 // Combined storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (file.fieldname === 'resume') cb(null, 'uploads/resumes');
-    else if (file.fieldname === 'profilePhoto') cb(null, 'uploads/profilePhotos');
-    else cb(new Error('Invalid fieldname'), false);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = uuidv4() + '-' + file.originalname;
-    cb(null, uniqueName);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     if (file.fieldname === 'resume') cb(null, 'uploads/resumes');
+//     else if (file.fieldname === 'profilePhoto') cb(null, 'uploads/profilePhotos');
+//     else cb(new Error('Invalid fieldname'), false);
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueName = uuidv4() + '-' + file.originalname;
+//     cb(null, uniqueName);
+//   },
+// });
 
 // Combined filter config
-const fileFilter = (req, file, cb) => {
+// const fileFilter = (req, file, cb) => {
   
-  if (file.fieldname === 'resume') {
+//   if (file.fieldname === 'resume') {
  
-    const ext = path.extname(file.originalname).toLowerCase();
-    const allowedExts = ['.pdf', '.doc', '.docx'];
+//     const ext = path.extname(file.originalname).toLowerCase();
+//     const allowedExts = ['.pdf', '.doc', '.docx'];
 
-    if (allowedExts.includes(ext)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid resume format'), false);
-    }
-  } else if (file.fieldname === 'profilePhoto') {
-    if (
-      file.mimetype === 'image/png' ||
-      file.mimetype === 'image/jpg' ||
-      file.mimetype === 'image/jpeg'
-  ) {
-      cb(null, true);
-  } else {
-      cb(new Error('Only jpg, png, jpeg allowed'), false);
-  }
-  } else {
-    cb(new Error('Unexpected field'), false);
-  }
-};
+//     if (allowedExts.includes(ext)) {
+//       cb(null, true);
+//     } else {
+//       cb(new Error('Invalid resume format'), false);
+//     }
+//   } else if (file.fieldname === 'profilePhoto') {
+//     if (
+//       file.mimetype === 'image/png' ||
+//       file.mimetype === 'image/jpg' ||
+//       file.mimetype === 'image/jpeg'
+//   ) {
+//       cb(null, true);
+//   } else {
+//       cb(new Error('Only jpg, png, jpeg allowed'), false);
+//   }
+//   } else {
+//     cb(new Error('Unexpected field'), false);
+//   }
+// };
 
-const upload = multer({ storage, fileFilter });
+// const upload = multer({ storage, fileFilter });
 
 
 router.get('/getjobs', authSeeker, seekerController.getJobs)
@@ -88,7 +88,11 @@ router.put(
   //     next();
   //   });
   // },
-  combinedCloudinaryUpload,
+  uploadProfileCloudinary.fields([
+    { name: 'profilePhoto', maxCount: 1 },
+    { name: 'resume', maxCount: 1 }
+  ])
+,  
   seekerController.editJobSeekerProfile
 );
 

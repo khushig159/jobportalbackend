@@ -130,11 +130,48 @@ const resumeUpload = multer({
   fileFilter: resumeFilter,
 });
 
+const uploadProfileCloudinary = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => {
+      const { name } = path.parse(file.originalname);
+      let folder = '';
+      let allowed_formats = [];
+
+      if (file.fieldname === 'resume') {
+        folder = 'jobportal/user-resumes';
+        allowed_formats = ['pdf', 'docx', 'doc'];
+      } else if (file.fieldname === 'profilePhoto') {
+        folder = 'jobportal/profilePhotos';
+        allowed_formats = ['jpg', 'jpeg', 'png'];
+      } else {
+        throw new Error('Unexpected field');
+      }
+
+      return {
+        folder,
+        allowed_formats,
+        public_id: `${name}-${Date.now()}`,
+        resource_type: file.fieldname === 'resume' ? 'auto' : 'image'
+      };
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (file.fieldname === 'resume') {
+      if (['.pdf', '.docx', '.doc'].includes(ext)) return cb(null, true);
+      return cb(new Error('Invalid resume format'), false);
+    } else if (file.fieldname === 'profilePhoto') {
+      if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.mimetype)) return cb(null, true);
+      return cb(new Error('Invalid image format'), false);
+    }
+    return cb(new Error('Unexpected field'), false);
+  }
+});
+
+
 const uploadProfile = multer({ storage, fileFilter });
-const combinedCloudinaryUpload = multer({ storage, fileFilter }).fields([
-  { name: 'profilePhoto', maxCount: 1 },
-  { name: 'resume', maxCount: 1 }
-]);
+
 
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
 // const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
@@ -164,11 +201,12 @@ const clearImage = async (cloudinaryUrl) => {
 
 
 module.exports = {
+  uploadProfileCloudinary,
   uploadProfile,
   clearImage,
   profilePhotoUpload,
   resumeUpload,
   uploadCompanyLogo,
   uploadChatbotResume,
-  combinedCloudinaryUpload
+  
 };
