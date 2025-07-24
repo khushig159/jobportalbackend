@@ -5,7 +5,7 @@ const seekerController = require('../controller/seeker');
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-const { uploadProfile, profilePhotoUpload, resumeUpload, uploadChatbotResume } = require('../middleware/multer');
+const { uploadProfile, combinedCloudinaryUpload,profilePhotoUpload, resumeUpload, uploadChatbotResume } = require('../middleware/multer');
 
 
 // Combined storage config
@@ -79,12 +79,16 @@ router.delete('/deleteApplication/:jobId',authSeeker,seekerController.deleteAppl
 router.put(
   '/editProfile',
   authSeeker,
-  (req, res, next) => {
-    profilePhotoUpload.fields([{ name: 'profilePhoto', maxCount: 1 }])(req, res, function (err) {
-      if (err) return next(err);
-      resumeUpload.fields([{ name: 'resume', maxCount: 1 }])(req, res, next);
-    });
-  },
+  // (req, res, next) => {
+  //   uploadProfile.fields([
+  //     { name: 'profilePhoto', maxCount: 1 },
+  //     { name: 'resume', maxCount: 1 }
+  //   ])(req, res, function (err) {
+  //     if (err) return res.status(400).json({ error: err.message });
+  //     next();
+  //   });
+  // },
+  combinedCloudinaryUpload,
   seekerController.editJobSeekerProfile
 );
 
@@ -97,20 +101,20 @@ router.put(
 //   ]),
 //   seekerController.editJobSeekerProfile
 // )
-router.put(
-  '/editProfile',
-  authSeeker,
-  (req, res, next) => {
-    uploadProfile.fields([
-      { name: 'profilePhoto', maxCount: 1 },
-      { name: 'resume', maxCount: 1 }
-    ])(req, res, function (err) {
-      if (err) return res.status(400).json({ error: err.message });
-      next();
-    });
-  },
-  seekerController.editJobSeekerProfile
-);
+// router.put(
+//   '/editProfile',
+//   authSeeker,
+//   (req, res, next) => {
+//     uploadProfile.fields([
+//       { name: 'profilePhoto', maxCount: 1 },
+//       { name: 'resume', maxCount: 1 }
+//     ])(req, res, function (err) {
+//       if (err) return res.status(400).json({ error: err.message });
+//       next();
+//     });
+//   },
+//   seekerController.editJobSeekerProfile
+// );
 
 
 

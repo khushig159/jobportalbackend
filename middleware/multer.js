@@ -130,7 +130,12 @@ const resumeUpload = multer({
   fileFilter: resumeFilter,
 });
 
-// const uploadProfile = multer({ storage, fileFilter });
+const uploadProfile = multer({ storage, fileFilter });
+const combinedCloudinaryUpload = multer({ storage, fileFilter }).fields([
+  { name: 'profilePhoto', maxCount: 1 },
+  { name: 'resume', maxCount: 1 }
+]);
+
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
 // const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
 const uploadChatbotResume = multer({ storage: chatbotResumeStorage, fileFilter: resumeFilter });
@@ -159,9 +164,11 @@ const clearImage = async (cloudinaryUrl) => {
 
 
 module.exports = {
+  uploadProfile,
   clearImage,
   profilePhotoUpload,
   resumeUpload,
   uploadCompanyLogo,
-  uploadChatbotResume
+  uploadChatbotResume,
+  combinedCloudinaryUpload
 };

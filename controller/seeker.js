@@ -5,7 +5,8 @@ const Recruiter = require('../model/recruiter')
 const fs = require('fs')
 const path = require('path')
 const {clearImage}=require('../middleware/multer')
-
+const { v2: cloudinary } = require('cloudinary');
+const {streamifier}=require('streamifier')
 
 exports.getJobs = async (req, res, next) => {
     try {
@@ -316,28 +317,87 @@ exports.editJobSeekerProfile = async (req, res, next) => {
         //     }
         //     jobSeeker.profilephoto = photoPath2;
         // }
-        if (req.files?.resume?.[0]) {
-            const newResumeUrl =
-              req.files.resume[0].secure_url || req.files.resume[0].url || req.files.resume[0].path;
+        // if (req.files?.resume?.[0]) {
+        //     const newResumeUrl =
+        //       req.files.resume[0].secure_url || req.files.resume[0].url || req.files.resume[0].path;
         
-            if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== newResumeUrl) {
-              await clearImage(jobSeeker.resumeUrl);
-            }
+        //     if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== newResumeUrl) {
+        //       await clearImage(jobSeeker.resumeUrl);
+        //     }
         
-            jobSeeker.resumeUrl = newResumeUrl;
-            console.log(newResumeUrl)
-        }
+        //     jobSeeker.resumeUrl = newResumeUrl;
+        //     console.log(newResumeUrl)
+        // }
         
-        if (req.files?.profilePhoto?.[0]) {
-            const newPhotoUrl =
-              req.files.profilePhoto[0].secure_url || req.files.profilePhoto[0].url || req.files.profilePhoto[0].path;
+        // if (req.files?.profilePhoto?.[0]) {
+        //     const newPhotoUrl =
+        //       req.files.profilePhoto[0].secure_url || req.files.profilePhoto[0].url || req.files.profilePhoto[0].path;
         
-            if (jobSeeker.profilephoto && jobSeeker.profilephoto !== newPhotoUrl) {
-              await clearImage(jobSeeker.profilephoto);
-            }
+        //     if (jobSeeker.profilephoto && jobSeeker.profilephoto !== newPhotoUrl) {
+        //       await clearImage(jobSeeker.profilephoto);
+        //     }
         
-            jobSeeker.profilephoto = newPhotoUrl;
-        }
+        //     jobSeeker.profilephoto = newPhotoUrl;
+        // }
+
+if (req.files?.resume?.[0]) {
+  const resumeBuffer = req.files.resume[0].buffer;
+
+  const resumeUpload = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'jobportal/user-resumes',
+        resource_type: 'auto',
+        public_id: `${Date.now()}_${req.files.resume[0].originalname.split('.')[0]}`
+      },
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+
+    streamifier.createReadStream(resumeBuffer).pipe(stream);
+  });
+
+  const newResumeUrl = resumeUpload.secure_url;
+
+  if (jobSeeker.resumeUrl && jobSeeker.resumeUrl !== newResumeUrl) {
+    await clearImage(jobSeeker.resumeUrl);
+  }
+
+  jobSeeker.resumeUrl = newResumeUrl;
+  console.log('📄 Resume Uploaded:', newResumeUrl);
+}
+
+if (req.files?.profilePhoto?.[0]) {
+  const imageBuffer = req.files.profilePhoto[0].buffer;
+
+  const photoUpload = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'jobportal/profilePhotos',
+        resource_type: 'image',
+        public_id: `${Date.now()}_${req.files.profilePhoto[0].originalname.split('.')[0]}`
+      },
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+
+    streamifier.createReadStream(imageBuffer).pipe(stream);
+  });
+
+  const newPhotoUrl = photoUpload.secure_url;
+
+  if (jobSeeker.profilephoto && jobSeeker.profilephoto !== newPhotoUrl) {
+    await clearImage(jobSeeker.profilephoto);
+  }
+
+  jobSeeker.profilephoto = newPhotoUrl;
+  console.log('🖼️ Profile Photo Uploaded:', newPhotoUrl);
+}
+
         
 
         jobSeeker.phone=phone || jobSeeker.phone;
