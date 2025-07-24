@@ -134,7 +134,7 @@ const uploadProfileCloudinary = multer({
   storage: new CloudinaryStorage({
     cloudinary,
     params: async (req, file) => {
-      const { name } = path.parse(file.originalname);
+      const { name :originalnameWithoutExt} = path.parse(file.originalname);
       let folder = '';
       let allowed_formats = [];
 
@@ -151,7 +151,9 @@ const uploadProfileCloudinary = multer({
       return {
         folder,
         allowed_formats,
-        public_id: `${name}-${Date.now()}`,
+        public_id: file.fieldname === 'resume' 
+        ? `${Date.now()}_${originalnameWithoutExt}.pdf` // ✅ only for resume
+        : `${Date.now()}_${originalnameWithoutExt}`,   
         resource_type: file.fieldname === 'resume' ? 'raw' : 'auto'
       };
     }
