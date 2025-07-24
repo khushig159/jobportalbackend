@@ -152,7 +152,7 @@ const uploadProfileCloudinary = multer({
         folder,
         allowed_formats,
         public_id: `${name}-${Date.now()}`,
-        resource_type: file.fieldname === 'resume' ? 'auto' : 'image'
+        resource_type: file.fieldname === 'resume' ? 'auto' : 'auto'
       };
     }
   }),
