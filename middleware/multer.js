@@ -132,7 +132,7 @@ const resumeUpload = multer({
 
 // const uploadProfile = multer({ storage, fileFilter });
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
-const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
+// const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
 const uploadChatbotResume = multer({ storage: chatbotResumeStorage, fileFilter: resumeFilter });
 
 
