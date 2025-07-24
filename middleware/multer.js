@@ -104,10 +104,35 @@ const resumeFilter = (req, file, cb) => {
     cb(new Error('Only PDF, DOCX, DOC files are allowed'), false);
   }
 };
+const profilePhotoUpload = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: 'jobportal/profilePhotos',
+      allowed_formats: ['jpg', 'jpeg', 'png'],
+      resource_type: 'image',
+      public_id: (req, file) => `${path.parse(file.originalname).name}-${Date.now()}`
+    }
+  }),
+  fileFilter: imageFilter,
+});
 
-const uploadProfile = multer({ storage, fileFilter });
+const resumeUpload = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: 'jobportal/user-resumes',
+      allowed_formats: ['pdf', 'docx', 'doc'],
+      resource_type: 'auto',
+      public_id: (req, file) => `${path.parse(file.originalname).name}-${Date.now()}`
+    }
+  }),
+  fileFilter: resumeFilter,
+});
+
+// const uploadProfile = multer({ storage, fileFilter });
 const uploadCompanyLogo = multer({ storage: imageStorage, fileFilter: imageFilter });
-// const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
+const uploadUserResume = multer({ storage: resumeStorage, fileFilter: resumeFilter });
 const uploadChatbotResume = multer({ storage: chatbotResumeStorage, fileFilter: resumeFilter });
 
 
@@ -135,7 +160,8 @@ const clearImage = async (cloudinaryUrl) => {
 
 module.exports = {
   clearImage,
-  uploadProfile,
+  profilePhotoUpload,
+  resumeUpload,
   uploadCompanyLogo,
   uploadChatbotResume
 };
