@@ -5,7 +5,7 @@ const seekerController = require('../controller/seeker');
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-const { uploadProfile, combinedCloudinaryUpload,profilePhotoUpload, resumeUpload, uploadChatbotResume } = require('../middleware/multer');
+const { uploadProfile, combinedCloudinaryUpload,profilePhotoUpload, uploadProfileCloudinary,resumeUpload, uploadChatbotResume } = require('../middleware/multer');
 
 
 // Combined storage config
