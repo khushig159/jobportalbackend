@@ -325,6 +325,7 @@ exports.editJobSeekerProfile = async (req, res, next) => {
             }
         
             jobSeeker.resumeUrl = newResumeUrl;
+            console.log(newResumeUrl)
         }
         
         if (req.files?.profilePhoto?.[0]) {

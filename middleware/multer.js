@@ -25,7 +25,7 @@ const storage = new CloudinaryStorage({
     params: async (req, file) => {
       let folder = '';
       let resource_type = '';
-      let type='upload'
+      // let type='upload'
       if (file.fieldname === 'resume') {
         folder = 'jobportal/user-resumes';
         resource_type='auto'
@@ -43,7 +43,7 @@ const storage = new CloudinaryStorage({
         allowed_formats: file.fieldname === 'profilePhoto' ? ['jpg', 'png', 'jpeg'] : ['pdf', 'docx', 'doc'],
         public_id: `${name}-${Date.now()}`,
         // resource_type,
-        type
+        // type
       };
     }
   });
