@@ -4,6 +4,7 @@ A powerful and secure Node.js backend for the **Workora Job Portal**, enabling s
 
 > 🔗 [Frontend Repository](https://github.com/khushig159/jobportalfrontend)  
 > 🌐 Live Project: [workorajobs.netlify.app](https://workorajobs.netlify.app/)
+> 👉 Video Demo: https://drive.google.com/file/d/10kt1y82IoMO3X8TA7n12ar8PV06j9Ezr/view?usp=drivesdk
 
 ---
 
