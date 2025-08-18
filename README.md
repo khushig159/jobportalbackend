@@ -1,27 +1,27 @@
-# 🧠 Workora – Job Portal Backend
+#  Workora – Job Portal Backend
 
 A powerful and secure Node.js backend for the **Workora Job Portal**, enabling smart hiring solutions, secure user authentication, real-time messaging, resume parsing via AI, and file handling with cloud storage.
 
-> 🔗 [Frontend Repository](https://github.com/khushig159/jobportalfrontend)  
-> 🌐 Live Project: [workorajobs.netlify.app](https://workorajobs.netlify.app/)
-> 👉 Video Demo: https://drive.google.com/file/d/10kt1y82IoMO3X8TA7n12ar8PV06j9Ezr/view?usp=drivesdk
+>  [Frontend Repository](https://github.com/khushig159/jobportalfrontend)  
+>  Live Project: [workorajobs.netlify.app](https://workorajobs.netlify.app/)
+>  Video Demo: https://drive.google.com/file/d/10kt1y82IoMO3X8TA7n12ar8PV06j9Ezr/view?usp=drivesdk
 
 ---
 
-## 🚀 Features
+##  Features
 
-### ✅ Authentication & Authorization
+###  Authentication & Authorization
 - JWT-based authentication for job seekers and recruiters
 - Middleware for **role-based route protection**
 - Secure login, signup, password recovery
 
-### 💼 Recruiter Capabilities
+###  Recruiter Capabilities
 - Post, edit, and manage job listings
 - View applicants and parsed resumes
 - Upload and manage company logo
 - Real-time chat with job seekers
 
-### 👨‍💻 Job Seeker Features
+###  Job Seeker Features
 - Create & update profile
 - Upload resume
 - Save & apply to jobs
@@ -29,13 +29,13 @@ A powerful and secure Node.js backend for the **Workora Job Portal**, enabling s
 - AI chat assistant for career queries
 - Profile photo management
 
-### 🤖 AI-Powered Resume Parsing & Advice
+###  AI-Powered Resume Parsing & Advice
 - Upload PDF/Doc resumes
 - Extracts skills, education, experience using OpenAI
 - Suggests job matches and gives **career-related advice only**
 - Uses prompt engineering to restrict scope to jobs/career
 
-### 📦 File Handling & Cloudinary Integration
+###  File Handling & Cloudinary Integration
 - **Resume, profile photo, company logo** uploads supported
 - Securely stored using **Cloudinary**
 - Uploads categorized into folders
@@ -44,7 +44,7 @@ A powerful and secure Node.js backend for the **Workora Job Portal**, enabling s
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
 | Area               | Technology                    |
 |--------------------|-------------------------------|
@@ -63,7 +63,7 @@ A powerful and secure Node.js backend for the **Workora Job Portal**, enabling s
 
 ---
 
-## 📦 API Endpoints Overview
+##  API Endpoints Overview
 
 > Here’s a glimpse of modular routes:
 
@@ -77,14 +77,14 @@ A powerful and secure Node.js backend for the **Workora Job Portal**, enabling s
 
 ---
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 - Admin dashboard and job moderation
 - Resume parsing via ML locally (privacy-focused)
 - Chatbot with voice integration
 - Email notification system (applied, shortlisted)
 - Analytics for recruiters
 
-## 🔐 Environment Variables
+##  Environment Variables
 
 You must create a `.env` file with the following:
 
@@ -99,7 +99,7 @@ EMAIL_USER=your_gmail_id
 EMAIL_PASS=your_gmail_oauth_or_app_password
 
 
-## 🗂️ Folder Structure
+##  Folder Structure
 ```bash
 ├── controller/ # Core business logic
 │ ├── auth-recruiter.js
